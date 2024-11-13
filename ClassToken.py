@@ -1,5 +1,4 @@
 class Token():
-
     def __init__(self, lexiema, Tstring, numLinhas):
         self.lexiema = lexiema, 
         self.Tstring = Tstring, 

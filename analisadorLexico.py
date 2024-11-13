@@ -1,5 +1,5 @@
 import sys
-from Token import *
+from ClassToken import *
 
 ARGUMENTOS = sys.argv
 
