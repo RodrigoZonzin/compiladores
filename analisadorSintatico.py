@@ -21,30 +21,38 @@ vetor_tokens =[tk0, tk1, tk2, tk3, tk4, tk5, tk6, tk7, tk8, tk9, tk10]
 i = 0
 token = vetor_tokens[i]
 
+
+print(tk0.Tstring)
+
 #FUNCOES AUXILIARES
 def match(lexiema): 
     if token == lexiema:
+        print(f"Reconehcido {token.Tstring}")
         i += 1
         token = vetor_tokens[i]
-
+        
 
 #DEFINICÇÃO DA GRMÁTICA
 #Programa -> Funcao FuncaoSeq
 
 def Programa(): 
-    token = vetor_tokens[i]
-    if(token == 'FUNCTION'):
+    print("OI")
+    print(token.Tstring)
+    if(token.Tstring == 'FUNCTION'):
+        print("OIII")
         Funcao()
         FuncaoSeq()
 
 #FuncaoSeq -> Funcao FuncaoSeq | e
 def FuncaoSeq(): 
+    print("FUNCAOSEQ")
     if(token == 'FUNCTION'):
         Funcao()
         FuncaoSeq()
 
 
 def NomeFuncao(): 
+    print("NOME")
     if token == 'MAIN': 
         match('MAIN')
     elif token == 'ID': 
