@@ -90,6 +90,14 @@ def Type():
     else: 
         print(f"Esperado  INT, FLOAT ou CHAR. Linha {token.numLinhas}")
 
+#Bloco -> { Sequencia }
 def Bloco():
-    pass
+    if(token == '{'):
+        match('{')
+    Sequencia()
+    if(token == '}' ):
+        match('}')
+        return 
+    
+    print(f'Erro no bloco. Linha {token.numLinhas}')
 
