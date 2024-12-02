@@ -115,6 +115,7 @@ for line in file:
         elif ESTADO == 1: 
             if char == '=':
                 pass
+            
                 #tokens.append(Token(''))
             
 
