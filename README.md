@@ -14,6 +14,7 @@ Tem os métodos:
 * slavar txt: salva em txt, permite uma visualização mais fácil 
 
 ### Analisador Sintático
+
 * recebe o vetor de tokens
 
 ### Analisador Semântico
