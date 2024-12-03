@@ -1,6 +1,6 @@
 import string
 import json
-from classeToken import *
+from src.classeToken import *
 
 class AnalisadorLexico():
     def __init__(self, filename): 

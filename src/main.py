@@ -1,6 +1,6 @@
 import sys
-from analisadorLexico import *
-from analisadorSintatico import *
+from src.analisadorLexico import *
+from src.analisadorSintatico import *
 
 filename = sys.argv[1] 
 
