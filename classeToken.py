@@ -13,3 +13,10 @@ class Token():
         else: 
             return False
 
+
+    def to_dict(self):
+        return {
+            "Token": self.Tstring,
+            "Lexema": self.lex,
+            "Linhas": self.nlinhas
+        }

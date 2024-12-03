@@ -1,5 +1,5 @@
 anle: 
-	python3 analisadorLexico.py oi.p
+	python3 main.py oi.p
 
 ansi: 	
 	python3 analisadorSintatico.py 
