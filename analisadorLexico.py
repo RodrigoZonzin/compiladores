@@ -1,6 +1,6 @@
 import sys
 import string
-from ClassToken import *
+from classeToken import *
 
 fileName = sys.argv[1] 
 file = open(fileName, "r")
@@ -19,7 +19,7 @@ for line in file:
     print(num_linha, line)
     while i< len(ibuf):
         char = ibuf[i]
-        print(char, ESTADO)
+        print(ESTADO, char)
     
         if ESTADO == 0: 
             if char == '(': 
@@ -113,14 +113,202 @@ for line in file:
             i += 1
         
         elif ESTADO == 1: 
+            if char == '=':        
+                tokens.append(Token('EQ', '==', num_linha))
+                ESTADO = 0
+            
+            else:        
+                tokens.append(Token('ASSIGN', '=', num_linha))
+                ESTADO = 0
+            
+            i += 1
+
+        elif ESTADO == 2: 
             if char == '=':
-                pass
+                tokens.append(Token("NE", '!=', num_linha))
+                ESTADO = 0
             
-                #tokens.append(Token(''))
+            else: 
+                raise Exception(f"{num_linha}: Errro após o token: {char}")
+        
+        elif ESTADO == 3: 
+            if char == '=':
+                tokens.append(Token('GE', '>=', num_linha))
+                ESTADO = 0
+            else: 
+                tokens.append(Token('GT', '>', num_linha))
+                ESTADO = 0
             
+        elif ESTADO == 4:
+            if char == '=':
+                tokens.append(Token('LE', '<=', num_linha))
+                ESTADO = 0
+            
+            else: 
+                tokens.append(Token('LT', '<', num_linha))
+                ESTADO = 0
 
-            
+            i += 1
 
-    
+        elif ESTADO == 5: 
+            if char == '>':
+                tokens.appendt(Token("ARROW", '>', num_linha))
+                ESTADO = 0
+            else: 
+                tokens.append("MINUS", '-', num_linha)
+                ESTADO = 0
+        
+        elif ESTADO == 6:
+            if char == '.':
+                lexeme.append(char)
+                i += 1
+                ESTADO = 7
+            
+            elif char in string.digits:
+                lexeme.append(char)
+                i += 1
+
+                if i == len(ibuf):
+                    ibuf = ibuf + " "
+            
+            else: 
+                palavra = ''.join(lexeme)
+                tokens.append(Token("INT_CONST", palavra, num_linha))
+                ESTADO = 0
+                lexeme = []
+
+        elif ESTADO == 7:
+            if char in string.digits:
+                lexeme.append(char)
+                i += 1
+                ESTADO = 8
+        
+        elif ESTADO == 8:
+            if char == '.':
+                raise Exception(f"{num_linha}: Erro em {char}")
+            
+            elif char in string.digits:
+                lexeme.append(char)
+                i += 1
+                if i == len(ibuf):
+                    ibuf = ibuf + " "
+            
+            else:
+                palavra = ''.join(lexeme)
+                tokens.append(Token("FLOAT_CONST", palavra, num_linha))
+                ESTADO = 0
+                lexeme = []
+
+        elif ESTADO == 9: 
+            if char in string.digits or char in string.ascii_letters or char == '_':
+                lexeme.append(char)
+                i += 1
+                if i == len(ibuf):
+                    ibuf + " "
+                
+            else: 
+                palavra = ''.join(lexeme)
+                palavrasReservadas = ['fn', 'main', 'return', 'int', 'float', 'char', 'if', 'else', 'while', 'println', 'return']
+                token_correspondente = ['FUNCTION', 'MAIN', 'LET', 'INT', 'FLOAT', 'CHAR', 'IF', 'ELSE', 'PRINTLN', 'RETURN']
+                
+                if palavra == 'main':
+                    tokens.append(Token('MAIN', palavra, num_linha))
+                    ESTADO = 0
+
+                elif palavra == 'let':
+                    tokens.append(Token('LET', palavra, num_linha))
+                    ESTADO = 0
+
+                elif palavra == 'int':
+                    tokens.append(Token('INT', palavra, num_linha))
+                    ESTADO = 0
+
+                elif palavra == 'float':
+                    tokens.append(Token('FLOAT', palavra, num_linha))
+                    ESTADO = 0
+
+                elif palavra == 'char':
+                    tokens.append(Token('CHAR', palavra, num_linha))
+                    ESTADO = 0
+
+                elif palavra == 'if':
+                    tokens.append(Token('IF', palavra, num_linha))
+                    ESTADO = 0
+
+                elif palavra == 'else':
+                    tokens.append(Token('ELSE', palavra, num_linha))
+                    ESTADO = 0
+
+                elif palavra == 'while':
+                    tokens.append(Token('WHILE', palavra, num_linha))
+                    ESTADO = 0
+
+                elif palavra == 'println':
+                    tokens.append(Token('PRINTLN', palavra, num_linha))
+                    ESTADO = 0
+
+                elif palavra == 'return':
+                    tokens.append(Token('RETURN', palavra, num_linha))
+                    ESTADO = 0
+
+                else: 
+                    tokens.append(Token('ID', palavra, num_linha))
+                    ESTADO = 0
+                    
+                lexeme = []
+            
+        elif ESTADO == 10:
+            i += 1
+            if char == "'": 
+                tokens.append('CHAR_LITERAL', char, num_linha)
+                i += 1
+                ESTADO = 0
+
+            else: 
+                lexeme.append(char)
+                ESTADO = 11
+        
+        elif ESTADO == 11: 
+            if char == "'": 
+                palavra = ''.join(lexeme)
+                tokens.append('CHAR_LITERAL',palavra, num_linha)
+                i += 1
+                ESTADO = 0
+                lexeme = []
+            else:
+                raise Exception(f"{num_linha}: Erro em {char}")
+            
+        elif ESTADO == 12: 
+            lexeme.append(char)
+            i += 1
+
+            if char == '"':
+                tokens.append('FMT_STRING', '', num_linha)
+                i += 1
+                ESTADO = 0
+                lexeme = []
+            
+            else: 
+                ESTADO = 13
+            
+        elif ESTADO == 13: 
+            if char == '"':
+                palavra = ''.join(lexeme)
+                tokens.append('FMT_STRING', palavra, num_linha)
+                i += 1
+                ESTADO = 0
+                lexeme = []
+
+            else: 
+                lexeme.append(char)
+                i += 1               
     
     num_linha += 1
+
+
+arq_saida = open('saida.tkn', 'w')
+
+for token in tokens:
+    arq_saida.write(f"{str(token)}\n")
+
+arq_saida.close()
