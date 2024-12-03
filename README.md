@@ -3,7 +3,7 @@
 
 ### Para rodar
 ~~~shell
-python3 main.c nome_arquivo.p`
+python3 main.c nome_arquivo.p
 ~~~
 
 ### Analisador Lexico 
@@ -14,6 +14,6 @@ Tem os métodos:
 * slavar txt: salva em txt, permite uma visualização mais fácil 
 
 ### Analisador Sintático
-    * recebe o vetor de tokens
+* recebe o vetor de tokens
 
 ### Analisador Semântico
