@@ -1,5 +1,6 @@
 import sys
 from analisadorLexico import *
+from analisadorSintatico import *
 
 filename = sys.argv[1] 
 
@@ -10,8 +11,7 @@ al.analise()
 al.salvar_tokens()
 al.salvar_txt()
 
-#analisador sintativo
-#vetor_tokens = al.tokens
-#Programa()
+
+mainSintatico(al.tokens)
 
 

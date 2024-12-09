@@ -10,7 +10,6 @@ class AnalisadorLexico():
         self.ESTADO = 0         #estado inicial 0
 
     def analise(self):
-        print(self.filename)
         file = open(self.filename, "r")
 
         num_linha = 1
@@ -311,19 +310,20 @@ class AnalisadorLexico():
                         i += 1               
             
             num_linha += 1
+        
+        print('Fim da Analise Lexica')
 
     def salvar_txt(self):
         nome_arq_saida = self.filename[:-2]+".txt"
         arq_saida = open(nome_arq_saida, 'w')
         
         for token in self.tokens: 
-            arq_saida.write(str(token)+"\n")
+            arq_saida.write(f"{token.Tstring.ljust(10)}  {token.lex.ljust(5)}\n")
         
         arq_saida.close()
 
     def salvar_tokens(self):
         nome_arq_saida = self.filename[:-2]+".json"
-        print(nome_arq_saida)
         with open(nome_arq_saida, 'w', encoding='utf-8') as arq_saida:
 
             json.dump([token.to_dict() for token in self.tokens], arq_saida, indent=4, ensure_ascii=False)

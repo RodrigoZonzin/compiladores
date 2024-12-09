@@ -10,18 +10,12 @@ def carregar_tokens(caminho_arquivo):
     return [Token(d['Token'], d['Lexema'], d['Linhas']) for d in dados]
 
 
-vetor_tokens = carregar_tokens(sys.argv[1])
-vetor_tokens.append(Token('EOF', 'eof', 0))
-
-i = 0
-token = vetor_tokens[i]
-
 #FUNCOES AUXILIARES
 def match(lexema):
-    global token, i
+    global token, i, vetor_tokens
     
     if token == lexema:
-        print(f"Reconhecido {token}. i: {i}")
+        print(f"Reconhecido {token.Tstring}: {token.lex}")
         i += 1
         token = vetor_tokens[i]
         
@@ -30,6 +24,8 @@ def match(lexema):
 #DEFINICÇÃO DA GRMÁTICA
 #Programa -> Funcao FuncaoSeq
 def Programa(): 
+    global token, i, vetor_tokens
+
     #pdb.set_trace()
     if(token == 'FUNCTION'):
         Funcao()
@@ -186,10 +182,12 @@ def Comando():
         ComandoSe()
     
     elif token == 'WHILE':
+        match('WHILE')
         Expr()
         Bloco()
 
     elif token == 'PRINTLN': 
+        match('PRINTLN')
         match('LBRACKET')
         match('FMT_STRING')
         match('COMMA')
@@ -218,6 +216,7 @@ def AtribuicaoOuChamada():
         match('LBRACKET')
         ListaArgs()
         match('RBRACKET')
+        match('SEMICOLON')
     else: 
         raise Exception(f"Esperado = ou (). Encontrado: {token.lex}. Linha: {token.nlinhas}")
     
@@ -231,7 +230,7 @@ def ComandoSe():
         Bloco()
         ComandoSenao()
     
-    else: 
+    elif token == 'LBRACE': 
         Bloco()
 
 
@@ -251,7 +250,7 @@ def Expr():
 #ExprOpc -> OpIgual Rel ExprOpc | ε
 def ExprOpc(): 
     #pdb.set_trace()
-    if token == 'EQ':
+    if token == 'EQ' or token == 'NE':
         OpIgual()
         Rel()
         ExprOpc()
@@ -307,7 +306,7 @@ def Adicao():
 #AdicaoOpc -> OpAdicao Termo AdicaoOpc | ε
 def AdicaoOpc(): 
     #pdb.set_trace()
-    if token == 'PLUS':
+    if token == 'PLUS' or token == 'MINUS':
         OpAdicao()
         Termo()
         AdicaoOpc()
@@ -333,7 +332,7 @@ def Termo():
 #TermoOpc -> OpMult Fator TermoOpc | ε
 def TermoOpc():
     #pdb.set_trace()
-    if token == 'MULT': 
+    if token == 'MULT' or token == 'DIV': 
         OpMult()
         Fator()
         TermoOpc()
@@ -370,8 +369,13 @@ def Fator():
     elif token == 'FLOAT_CONST':
         match('FLOAT_CONST')
 
-    elif token == 'CHAR_CONST':
-        match('CHAR_CONST')
+    elif token == 'CHAR_LITERAL':
+        match('CHAR_LITERAL')
+
+    elif token == 'LBRACKET': 
+        match('LBRACKET')
+        Expr()
+        match('RBRACKET')
     
     else: 
         raise Exception(f"Esperado chamda de funcao, int, float ou char. Encontrado {token.lex}. Linha: {token.nlinhas}")
@@ -387,7 +391,7 @@ def ChamadaFuncao():
 #ListaArgs -> Arg ListaArgs2 | ε
 def ListaArgs():
     #pdb.set_trace()
-    if token == 'ID': 
+    if token in ['ID', 'INT_CONST', 'FLOAT_CONST', 'CHAR_LITERAL' ]: 
         Arg()
         ListaArgs2()
 
@@ -418,6 +422,12 @@ def Arg():
         raise Exception(f'Esperado chamada de funcao, int, float ou char. Encontrado: {token.lex}. Linha: {token.linha}')
     
 
+def mainSintatico(vet):
+    vetor_tokens = vet
+    vetor_tokens.append(Token('EOF', 'eof', 0))
+    
+    i = 0
+    token = vetor_tokens[i]
 
-
-Programa()
+    globals().update(locals())      #transforma todas as variaveis locais em globais
+    Programa()
