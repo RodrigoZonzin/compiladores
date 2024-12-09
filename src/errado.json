@@ -1,0 +1,32 @@
+[
+    {
+        "Token": "ID",
+        "Lexema": "import",
+        "Linhas": 1
+    },
+    {
+        "Token": "ID",
+        "Lexema": "pandas",
+        "Linhas": 1
+    },
+    {
+        "Token": "ID",
+        "Lexema": "as",
+        "Linhas": 1
+    },
+    {
+        "Token": "ID",
+        "Lexema": "pandasdef",
+        "Linhas": 3
+    },
+    {
+        "Token": "ID",
+        "Lexema": "testeErrado",
+        "Linhas": 3
+    },
+    {
+        "Token": "COLON",
+        "Lexema": ":",
+        "Linhas": 3
+    }
+]

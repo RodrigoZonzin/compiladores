@@ -1,0 +1,6 @@
+ID import 1
+ID pandas 1
+ID as 1
+ID pandasdef 3
+ID testeErrado 3
+COLON : 3

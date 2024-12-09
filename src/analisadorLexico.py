@@ -1,6 +1,6 @@
 import string
 import json
-from src.classeToken import *
+from classeToken import *
 
 class AnalisadorLexico():
     def __init__(self, filename): 
@@ -10,6 +10,7 @@ class AnalisadorLexico():
         self.ESTADO = 0         #estado inicial 0
 
     def analise(self):
+        print(self.filename)
         file = open(self.filename, "r")
 
         num_linha = 1
@@ -17,18 +18,20 @@ class AnalisadorLexico():
         for line in file:
             ibuf = line.strip('\n')
             i = 0
-            print(num_linha, line)
+            #print(num_linha, line)
             while i< len(ibuf):
                 char = ibuf[i]
-                print(self.ESTADO, char)
+                #print(self.ESTADO, char)
             
                 if self.ESTADO == 0: 
+
+                    #print("Estou no estado 0, no char ",char)
                     if char == '(': 
                         self.tokens.append(Token('LBRACKET', '(', num_linha))
                         self.ESTADO = 0
                     
                     elif char == ')': 
-                        self.tokens.append(Token('RBRACKET', 'R', num_linha))
+                        self.tokens.append(Token('RBRACKET', ')', num_linha))
                         self.ESTADO = 0
                     
                     elif char == ':': 
@@ -44,23 +47,19 @@ class AnalisadorLexico():
                         self.ESTADO = 0
                     
                     elif char == '}': 
-                        self.tokens.append(Token('RBRACKET', '}', num_linha))
+                        self.tokens.append(Token('RBRACE', '}', num_linha))
                         self.ESTADO = 0
                     
                     elif char == ';': 
-                        self.tokens.append(Token('PCOMMA', ';', num_linha))
+                        self.tokens.append(Token('SEMICOLON', ';', num_linha))
                         self.ESTADO = 0
 
                     elif char == '+': 
                         self.tokens.append(Token('PLUS', '+', num_linha))
                         self.ESTADO = 0
                     
-                    elif char == '-': 
-                        self.tokens.append(Token('MINUS', '-', num_linha))
-                        self.ESTADO = 0
-                    
                     elif char == '*': 
-                        self.tokens.append(Token('MULTI', '*', num_linha))
+                        self.tokens.append(Token('MULT', '*', num_linha))
                         self.ESTADO = 0
                     
                     elif char == '/': 
@@ -114,6 +113,7 @@ class AnalisadorLexico():
                     i += 1
                 
                 elif self.ESTADO == 1: 
+                    #print('CHARRRRRR', char)
                     if char == '=':        
                         self.tokens.append(Token('EQ', '==', num_linha))
                         self.ESTADO = 0
@@ -153,11 +153,13 @@ class AnalisadorLexico():
 
                 elif self.ESTADO == 5: 
                     if char == '>':
-                        self.tokens.appendt(Token("ARROW", '>', num_linha))
+                        self.tokens.append(Token("ARROW", '->', num_linha))
                         self.ESTADO = 0
                     else: 
                         self.tokens.append("MINUS", '-', num_linha)
                         self.ESTADO = 0
+                    
+                    i += 1
                 
                 elif self.ESTADO == 6:
                     if char == '.':
@@ -214,6 +216,10 @@ class AnalisadorLexico():
                         
                         if palavra == 'main':
                             self.tokens.append(Token('MAIN', palavra, num_linha))
+                            self.ESTADO = 0
+
+                        elif palavra == 'fn':
+                            self.tokens.append(Token('FUNCTION', palavra, num_linha))
                             self.ESTADO = 0
 
                         elif palavra == 'let':
